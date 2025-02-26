@@ -183,6 +183,17 @@ export const BaseSideBar = () => {
           </DropdownMenu>
         </ul>
       </div>
+            <div className="mt-2 mb-2"> {/* iframe etwas Abstand geben */}
+    <iframe
+      src="http://dify.mountai.co/chatbot/87oymTGCoDpnYOlI"
+      style={{
+        width: '100%',
+        height: '500px',
+      }}
+      frameBorder="0"
+      allow="microphone"
+    />
+  </div>
       <TableList />
     </>
   );
