@@ -1,22 +1,12 @@
-
-networks:
-  teable-standalone:
-    name: teable-standalone-network
-    driver: bridge
-
-volumes:
-  teable-data: {}
-  teable-db: {}
-
 services:
   teable:
     image: playground:latest
-    container_name: teable-app
+    restart: always
     ports:
-      - "172.16.0.4:53068:3000"
+      - '3000:3000'
     volumes:
-      - teable-data:/app/.assets:rw
-      #- ./teable-app:/app:rw
+      - ./teable-app:/app:rw
+      #- teable-data:/app/.assets:rw
       # you may use a bind-mounted host directory instead,
       # so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/teable/data:/app/.assets:rw
@@ -30,13 +20,12 @@ services:
     depends_on:
       teable-db-migrate:
         condition: service_completed_successfully
-    restart: unless-stopped
 
   teable-db:
     image: postgres:15.4
-    container_name: teable-db
+    restart: always
     ports:
-      - "172.16.0.4:53069:5432"
+      - '42345:5432'
     volumes:
       - teable-db:/var/lib/postgresql/data:rw
       # you may use a bind-mounted host directory instead,
@@ -54,7 +43,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
-    restart: unless-stopped
 
   teable-db-migrate:
     image: ghcr.io/teableio/teable-db-migrate:latest
@@ -66,3 +54,12 @@ services:
     depends_on:
       teable-db:
         condition: service_healthy
+
+networks:
+  teable-standalone:
+    name: teable-standalone-network
+    driver: bridge
+
+volumes:
+  #teable-data: {}
+  teable-db: {}
